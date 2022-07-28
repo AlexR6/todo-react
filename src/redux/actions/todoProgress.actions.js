@@ -25,7 +25,6 @@ export const actionGetTodosScroll = (
 export const actionGetTodos = (dispatch, offset, setOffset, categorySelected) =>
   getTodosWithOffsetAndLimit(1, offset, 10, categorySelected).then((res) => {
     setOffset(res.data.length + offset);
-    console.log(res.data);
     dispatch({ type: GET_TODO_PROGRESS, payload: res.data });
   });
 

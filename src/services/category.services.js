@@ -23,3 +23,13 @@ export async function getCategories() {
     },
   });
 }
+
+export async function getCategoryWhereId(categoryId) {
+  return axios({
+    method: "GET",
+    url: `${process.env.REACT_APP_URL_API}category/get/${categoryId}`,
+    headers: {
+      Authorization: `Bearer ${window.localStorage.getItem("access_token")}`,
+    },
+  });
+}

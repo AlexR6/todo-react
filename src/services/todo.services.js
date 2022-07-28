@@ -6,7 +6,6 @@ export async function getTodosWithOffsetAndLimit(
   limit,
   category
 ) {
-  console.log(category);
   return axios({
     method: "GET",
     url: `${process.env.REACT_APP_URL_API}todo/all/${active}/${offset}/${limit}/${category}`,

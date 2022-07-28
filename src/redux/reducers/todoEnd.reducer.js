@@ -3,6 +3,7 @@ const initialState = [];
 export const GET_TODO_END = "GET_TODO_END";
 export const SCROLL_GET_TODO_END = "SCROLL_GET_TODO_END";
 export const REMOVE_TODO_END = "REMOVE_TODO_END";
+export const DELETE_TODO = "DELTE_TODO";
 
 function TodoEndReducer(state = initialState, action) {
   switch (action.type) {
@@ -12,6 +13,8 @@ function TodoEndReducer(state = initialState, action) {
       if (action.payload.length > 0) return state.concat(action.payload);
       return state;
     case REMOVE_TODO_END:
+      return state.filter((item) => item._id !== action.payload._id);
+    case DELETE_TODO:
       return state.filter((item) => item._id !== action.payload._id);
     default:
       return state;

@@ -1,24 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   actionGetOneTodo,
   actionUpdateStatusTodo,
   actionUpdateTodo,
 } from "../redux/actions/todoProgress.actions";
+import { getCategoryWhereId } from "../services/category.services";
 
 const CardTodoProgress = (props) => {
   const todos = useSelector((state) => state.todoProgress);
-  const { id, name, description, createdAt } = { ...props };
+  const { id, name, description, createdAt, categoryId } = { ...props };
   const [formIsActive, setFormIsActive] = useState(false);
   const [nameUpdate, setNameUpdate] = useState(name);
   const [descriptionUpdate, setDescriptionUpdate] = useState(description);
+  const [category, setCategory] = useState("");
   const dateCreatedAt = new Date(createdAt).toLocaleDateString("fr");
   const dispatch = useDispatch();
 
-  const handleClick = () => {
+  const handleUpdateStatus = () => {
     actionUpdateStatusTodo(dispatch, id);
     actionGetOneTodo(dispatch, todos.length);
-    console.log("progess", todos.length);
   };
 
   const handleUpdate = () => {
@@ -30,8 +31,15 @@ const CardTodoProgress = (props) => {
       dispatch
     );
   };
+
+  useEffect(() => {
+    if (categoryId) {
+      getCategoryWhereId(categoryId).then((res) => setCategory(res.data));
+    }
+  }, []);
+
   return (
-    <div className="card mb-4">
+    <div className="card mb-4" style={{ borderColor: category.color }}>
       {formIsActive ? (
         <div className="card-body">
           <div className="mb-3">
@@ -89,7 +97,10 @@ const CardTodoProgress = (props) => {
             >
               Modifier cette Todo
             </button>
-            <button className="btn btn-primary mx-2" onClick={handleClick}>
+            <button
+              className="btn btn-primary mx-2"
+              onClick={handleUpdateStatus}
+            >
               J'ai finis cette Todo
             </button>
           </div>

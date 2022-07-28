@@ -7,21 +7,32 @@ import { GET_USER } from "./redux/reducers/user.reducer";
 
 function App() {
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (
-      window.localStorage.getItem("access_token") &&
-      window.localStorage.getItem("duration_access_token")
-    ) {
-      if (window.localStorage.getItem("duration_access_token") >= Date.now()) {
-        dispatch({ type: LOGOUT });
-      }
-      getUser().then((res) => {
-        dispatch({ type: GET_USER, payload: res.data.user });
-        dispatch({ type: LOGIN });
-      });
-    }
-  }, []);
+  // if (
+  //   window.localStorage.getItem("access_token") &&
+  //   window.localStorage.getItem("duration_access_token")
+  // ) {
+  //   if (window.localStorage.getItem("duration_access_token") >= Date.now()) {
+  //     dispatch({ type: LOGOUT });
+  //   }
+  //   getUser().then((res) => {
+  //     dispatch({ type: GET_USER, payload: res.data.user });
+  //     dispatch({ type: LOGIN });
+  //   });
+  // }
+  // useEffect(() => {
+  //   if (
+  //     window.localStorage.getItem("access_token") &&
+  //     window.localStorage.getItem("duration_access_token")
+  //   ) {
+  //     if (window.localStorage.getItem("duration_access_token") >= Date.now()) {
+  //       dispatch({ type: LOGOUT });
+  //     }
+  //     getUser().then((res) => {
+  //       dispatch({ type: GET_USER, payload: res.data.user });
+  //       dispatch({ type: LOGIN });
+  //     });
+  //   }
+  // }, []);
   return <Router />;
 }
 

@@ -35,8 +35,19 @@ const Index = () => {
 
   return (
     <>
-      <div>
-        Filtrer par :
+      <div className="mb-4">
+        Filtrer par categorie :
+        <span
+          style={{ background: "rgba(0, 0, 0, 0.175)", cursor: "pointer" }}
+          className="badge mx-1"
+          onClick={() => {
+            setCategorySelected("aucun");
+            setOffset(0);
+          }}
+          key={"aucun"}
+        >
+          Sans filtre
+        </span>
         {categories[0] ? (
           categories.map((category) => {
             return (
@@ -66,6 +77,7 @@ const Index = () => {
               name={todo.name}
               description={todo.description}
               createdAt={todo.createdAt}
+              categoryId={todo.categoryId}
             />
           );
         })

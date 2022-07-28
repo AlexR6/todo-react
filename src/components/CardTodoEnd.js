@@ -1,26 +1,38 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   actionUpdateStatusTodo,
   actionGetOneTodo,
+  actionDeleteOneTodo,
 } from "../redux/actions/todoEnd.actions";
+import { getCategoryWhereId } from "../services/category.services";
 
 const CardTodoEnd = (props) => {
   const todos = useSelector((state) => state.todoEnd);
-  const { id, name, description, createdAt, endAt } = { ...props };
+  const { id, name, description, createdAt, endAt, categoryId } = { ...props };
   const dateCreatedAt = new Date(createdAt).toLocaleDateString("fr");
   const dateEndAt = new Date(endAt).toLocaleDateString("fr");
+  const [category, setCategory] = useState("");
   const dispatch = useDispatch();
 
-  const handleClick = () => {
+  const handleUpdateStatus = () => {
     actionUpdateStatusTodo(dispatch, id);
     actionGetOneTodo(dispatch, todos.length);
-
-    console.log("progess", todos.length);
   };
 
+  const handleDelete = () => {
+    actionDeleteOneTodo(dispatch, id);
+    actionGetOneTodo(dispatch, todos.length);
+  };
+
+  useEffect(() => {
+    if (categoryId) {
+      getCategoryWhereId(categoryId).then((res) => setCategory(res.data));
+    }
+  }, []);
+
   return (
-    <div className="card mb-4">
+    <div className="card mb-4" style={{ borderColor: category.color }}>
       <div className="card-body">
         <div className="row">
           <h5 className="card-title col-6 text-start">{name}</h5>
@@ -31,8 +43,11 @@ const CardTodoEnd = (props) => {
         <p className="mb-2">Todo terminée le : {dateEndAt}</p>
         <p className="card-text">{description}</p>
         <div className="text-center">
-          <button className="btn btn-primary" onClick={handleClick}>
+          <button className="btn btn-primary mx-2" onClick={handleUpdateStatus}>
             Je n'ai pas finis cette ToDo
+          </button>
+          <button className="btn btn-primary mx-2" onClick={handleDelete}>
+            Supprimer cette ToDo
           </button>
         </div>
       </div>
