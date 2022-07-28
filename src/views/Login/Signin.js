@@ -3,16 +3,16 @@ import { useDispatch } from "react-redux";
 import { LOGIN } from "../../redux/reducers/auth.reducer";
 import { signin } from "../../services/auth.services";
 
-const Signin = () => {
-  const [email, setEmail] = useState("");
+const Signin = (props) => {
+  const [pseudo, setPseudo] = useState("");
   const [password, setPassword] = useState("");
   const [messageError, setMessageError] = useState("");
   const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (email && password) {
-      return signin(email, password)
+    if (pseudo && password) {
+      return signin(pseudo, password)
         .then((res) => {
           if (res.data.access_token) {
             window.localStorage.setItem("access_token", res.data.access_token);
@@ -21,6 +21,7 @@ const Signin = () => {
               Math.floor(Date.now() / 1000) + 3600
             );
             dispatch({ type: LOGIN });
+            window.location.href = "/";
           }
         })
         .catch((err) => {
@@ -33,7 +34,8 @@ const Signin = () => {
     }
   };
   return (
-    <form onSubmit={handleSubmit} className="needs-validation">
+    <form onSubmit={handleSubmit} className="pt-5">
+      <h3 className="mb-4">Connexion</h3>
       {messageError ? (
         <div className="alert alert-danger" role="alert">
           {messageError}
@@ -42,16 +44,15 @@ const Signin = () => {
         <></>
       )}
       <div className="mb-3">
-        <label htmlFor="email" className="form-label">
-          Email
+        <label htmlFor="pseudo" className="form-label">
+          Pseudo
         </label>
         <input
-          type="email"
+          type="pseudo"
           className="form-control"
-          id="email"
-          placeholder="name@example.com"
-          onChange={(e) => setEmail(e.target.value)}
-          required
+          id="pseudo"
+          placeholder="JeanX9"
+          onChange={(e) => setPseudo(e.target.value)}
         />
       </div>
       <div className="mb-3">
@@ -64,11 +65,17 @@ const Signin = () => {
           id="password"
           placeholder="•••••••••"
           onChange={(e) => setPassword(e.target.value)}
-          required
         />
       </div>
       <div className="text-center">
-        <button className="btn btn-primary">Se connecter</button>
+        <button className="btn-main mb-3">Se connecter</button>
+        <p
+          className="text-info"
+          onClick={() => props.setSigninForm(false)}
+          style={{ cursor: "pointer" }}
+        >
+          Je n'ai pas de compte
+        </p>
       </div>
     </form>
   );

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { getCategories } from "../../services/category.services";
 import { createTodo } from "../../services/todo.services";
+import { useSelector } from "react-redux";
 
 const Index = () => {
   const [name, setName] = useState("");
@@ -8,7 +8,7 @@ const Index = () => {
   const [categorySelected, setCategorySelected] = useState("");
   const [messagesError, setMessagesError] = useState([]);
   const [messageSuccess, setMessageSuccess] = useState(false);
-  const [categories, setCategories] = useState([]);
+  const categories = useSelector((state) => state.category);
   const handleSubmit = (e) => {
     e.preventDefault();
     createTodo(name, description, categorySelected)
@@ -25,10 +25,6 @@ const Index = () => {
         }
       });
   };
-
-  useEffect(() => {
-    getCategories().then((res) => setCategories(res.data));
-  }, []);
   return (
     <form onSubmit={handleSubmit}>
       {messagesError &&
@@ -92,7 +88,7 @@ const Index = () => {
         />
       </div>
       <div className="text-center">
-        <button className="btn btn-primary">Ajouter cette Todo</button>
+        <button className="btn-main">Ajouter cette Todo</button>
       </div>
     </form>
   );

@@ -1,29 +1,37 @@
 import React, { useState } from "react";
 import { createCategory } from "../../services/category.services";
 import { useDispatch } from "react-redux";
+import { actionCreateCategory } from "../../redux/actions/category.actions";
 
 const Index = () => {
   const [name, setName] = useState("");
-  const [color, setColor] = useState("#000000");
+  const [color, setColor] = useState("#3d3d3d");
+  const [currentSelected, setCurrentSelected] = useState(null);
   const [messagesError, setMessagesError] = useState([]);
   const [messageSuccess, setMessageSuccess] = useState(false);
+  const dispatch = useDispatch();
+  const arrColor = [
+    "#C9CC41",
+    "#66CC41",
+    "#41CCA7",
+    "#4181CC",
+    "#41A2CC",
+    "#CC8441",
+    "#9741CC",
+    "#CC4173",
+  ];
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(color);
-    createCategory(name, color)
-      .then((res) => {
-        setMessagesError([]);
-        setMessageSuccess(true);
-        setName("");
-        setColor("#000000");
-      })
-      .catch((err) => {
-        if (err.response.data.message) {
-          setMessagesError(err.response.data.message);
-          setMessageSuccess(false);
-        }
-      });
+    actionCreateCategory(
+      dispatch,
+      name,
+      color,
+      setMessageSuccess,
+      setMessagesError
+    );
+    setName("");
+    setColor("#3d3d3d");
   };
   return (
     <form onSubmit={handleSubmit}>
@@ -56,18 +64,30 @@ const Index = () => {
       </div>
       <div className="mb-3">
         <label htmlFor="color" className="form-label">
-          Je choisis une couleur
+          Couleur
         </label>
-        <input
-          type="color"
-          id="color"
-          className="mx-4"
-          value={color}
-          onChange={(e) => setColor(e.target.value)}
-        />
+        <div className="d-flex gap-2 flex-wrap justify-content-center">
+          {arrColor.map((item) => {
+            return (
+              <div
+                className="div-color"
+                style={{ backgroundColor: item }}
+                key={item}
+                onClick={(e) => {
+                  if (currentSelected) {
+                    currentSelected.classList.remove("active");
+                  }
+                  setCurrentSelected(e.target);
+                  setColor(e.target.style.backgroundColor);
+                  e.target.classList.add("active");
+                }}
+              ></div>
+            );
+          })}
+        </div>
       </div>
       <div className="text-center">
-        <button className="btn btn-primary">Ajouter cette categorie</button>
+        <button className="btn-main">Ajouter cette categorie</button>
       </div>
     </form>
   );

@@ -3,8 +3,8 @@ import { useDispatch } from "react-redux";
 import { LOGIN } from "../../redux/reducers/auth.reducer";
 import { signin, signup } from "../../services/auth.services";
 
-const Signup = () => {
-  const [email, setEmail] = useState("");
+const Signup = (props) => {
+  const [pseudo, setPseudo] = useState("");
   const [password, setPassword] = useState("");
   const [checkPassword, setCheckPassword] = useState("");
   const [messageError, setMessageError] = useState("");
@@ -12,9 +12,9 @@ const Signup = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (email && password && checkPassword) {
+    if (pseudo && password && checkPassword) {
       if (password == checkPassword) {
-        return signup(email, password)
+        return signup(pseudo, password)
           .then((res) => {
             if (res.data.access_token) {
               window.localStorage.setItem(
@@ -26,6 +26,7 @@ const Signup = () => {
                 Math.floor(Date.now() / 1000) + 3600
               );
               dispatch({ type: LOGIN });
+              window.location.href = "/";
             }
           })
           .catch((err) => {
@@ -41,7 +42,8 @@ const Signup = () => {
     }
   };
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="pt-5">
+      <h3 className="mb-4">Inscription</h3>
       {messageError ? (
         <div className="alert alert-danger" role="alert">
           {messageError}
@@ -50,15 +52,15 @@ const Signup = () => {
         <></>
       )}
       <div className="mb-3">
-        <label htmlFor="email" className="form-label">
-          Email
+        <label htmlFor="pseudo" className="form-label">
+          Pseudo
         </label>
         <input
-          type="email"
+          type="pseudo"
           className="form-control"
-          id="email"
-          placeholder="name@example.com"
-          onChange={(e) => setEmail(e.target.value)}
+          id="pseudo"
+          placeholder="JeanX9"
+          onChange={(e) => setPseudo(e.target.value)}
         />
       </div>
       <div className="mb-3">
@@ -86,7 +88,14 @@ const Signup = () => {
         />
       </div>
       <div className="text-center">
-        <button className="btn btn-primary">Crée mon compte</button>
+        <button className="btn-main mb-3">Crée mon compte</button>
+        <p
+          className="text-info"
+          onClick={() => props.setSigninForm(true)}
+          style={{ cursor: "pointer" }}
+        >
+          J'ai déjà un compte
+        </p>
       </div>
     </form>
   );

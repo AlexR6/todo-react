@@ -5,13 +5,12 @@ import {
   actionGetTodos,
   actionGetTodosScroll,
 } from "../../redux/actions/todoEnd.actions";
-import { getCategories } from "../../services/category.services";
 
 const Index = () => {
   const todos = useSelector((state) => state.todoEnd);
   const [offset, setOffset] = useState(0);
   const [categorySelected, setCategorySelected] = useState("aucun");
-  const [categories, setCategories] = useState([]);
+  const categories = useSelector((state) => state.category);
   const dispatch = useDispatch();
 
   const loadMore = () => {
@@ -26,18 +25,17 @@ const Index = () => {
   useEffect(() => {
     if (offset == 0) {
       actionGetTodos(dispatch, offset, setOffset, categorySelected);
-      getCategories().then((res) => setCategories(res.data));
     } else {
       window.addEventListener("scroll", loadMore);
       return () => window.removeEventListener("scroll", loadMore);
     }
-  }, [offset]);
+  }, [offset, categorySelected]);
   return (
     <>
       <div className="mb-4">
         Filtrer par categorie :
         <span
-          style={{ background: "rgba(0, 0, 0, 0.175)", cursor: "pointer" }}
+          style={{ background: "#3d3d3d", cursor: "pointer" }}
           className="badge mx-1"
           onClick={() => {
             setCategorySelected("aucun");
